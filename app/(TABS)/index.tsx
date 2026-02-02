@@ -16,6 +16,8 @@ export default function Index() {
     error: moviesError,
   } = useFetch(() => fetchMovies({ query: "" }));
 
+  const results = movies?.results ?? [];
+
   return (
     <View className="flex-1 bg-primary">
       <Image
@@ -34,7 +36,7 @@ export default function Index() {
         </View>
       ) : (
         <FlatList
-          data={movies?.results}
+          data={results}
           keyExtractor={(item) => item.id.toString()}
           numColumns={2}
           showsVerticalScrollIndicator={false}
