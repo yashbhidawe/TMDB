@@ -20,14 +20,17 @@ const Search = () => {
   const results = movies?.results ?? [];
 
   useEffect(() => {
-    const func = async () => {
-      if (searchTerm.trim()) {
-        await loadMovies();
-      } else {
-        reset();
-      }
-    };
-    func();
+    const timeoutId = setTimeout(() => {
+      const func = async () => {
+        if (searchTerm.trim()) {
+          await loadMovies();
+        } else {
+          reset();
+        }
+      };
+      func();
+    }, 500);
+    return () => clearTimeout(timeoutId);
   }, [searchTerm]);
 
   return (
