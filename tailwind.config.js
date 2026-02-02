@@ -5,18 +5,24 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "#030014",
-        secondary: "#151312",
-        light: {
-          100: "#D6C7FF",
-          200: "#A8B5DB",
-          300: "#9CA4AB",
-        },
-        dark: {
-          100: "#221F3D",
-          200: "#0F0D23",
-        },
-        accent: "#AB8BFF",
+        surface: "#0a0a0f",
+        "surface-elevated": "#12121a",
+        "surface-hover": "#1a1a24",
+        border: "#1c1c24",
+        "border-strong": "#2a2a36",
+        muted: "#71717a",
+        "muted-foreground": "#a1a1aa",
+        foreground: "#fafafa",
+        accent: "#6366f1",
+        "accent-foreground": "#e0e7ff",
+        destructive: "#ef4444",
+      },
+      fontFamily: {
+        sans: ["SpaceMono_400Regular"],
+      },
+      borderRadius: {
+        "2xl": "16px",
+        "3xl": "24px",
       },
     },
   },

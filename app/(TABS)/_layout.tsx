@@ -1,32 +1,42 @@
-import { Tabs } from "expo-router";
-import { Image, ImageBackground, Text, View } from "react-native";
-
 import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
+import { Tabs } from "expo-router";
+import { Image, Platform, Text, View } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-function TabIcon({ focused, icon, title }: any) {
-  if (focused) {
-    return (
-      <ImageBackground
-        source={images.highlight}
-        className="flex-row h-10 px-4 justify-center items-center rounded-full overflow-hidden"
-      >
-        <Image source={icon} tintColor="#151312" className="size-5" />
-        <Text className="text-secondary text-sm font-semibold ml-2">
-          {title}
-        </Text>
-      </ImageBackground>
-    );
-  }
-
+function TabIcon({
+  focused,
+  icon,
+  label,
+}: {
+  focused: boolean;
+  icon: number;
+  label: string;
+}) {
   return (
-    <View className="h-10 w-10 justify-center items-center rounded-full">
-      <Image source={icon} tintColor="#A8B5DB" className="size-5" />
+    <View
+      className={`flex-row items-center justify-center rounded-full ${
+        focused ? "bg-accent px-4 py-2" : ""
+      }`}
+    >
+      <Image
+        source={icon}
+        tintColor={focused ? "#e0e7ff" : "#71717a"}
+        className="size-5"
+      />
+      {focused && (
+        <Text className="text-accent-foreground text-sm font-semibold ml-2">
+          {label}
+        </Text>
+      )}
     </View>
   );
 }
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
+  const tabBarHeight = 56;
+  const bottom = Math.max(insets.bottom, 12);
+
   return (
     <Tabs
       screenOptions={{
@@ -38,50 +48,47 @@ export default function TabsLayout() {
           alignItems: "center",
         },
         tabBarStyle: {
-          backgroundColor: "#0F0D23",
-          borderRadius: 999,
-          marginHorizontal: 20,
-          marginBottom: 36,
-          height: 56,
-          position: "absolute",
-          overflow: "hidden",
-          borderWidth: 1,
-          borderColor: "#0F0D23",
+          backgroundColor: "#12121a",
+          borderTopWidth: 1,
+          borderTopColor: "#1c1c24",
+          height: tabBarHeight + bottom,
+          paddingTop: 8,
+          paddingBottom: bottom,
+          paddingHorizontal: Platform.OS === "ios" ? 24 : 16,
         },
+        tabBarActiveTintColor: "#6366f1",
+        tabBarInactiveTintColor: "#71717a",
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.home} title="Home" />
+            <TabIcon focused={focused} icon={icons.home} label="Home" />
           ),
         }}
       />
-
       <Tabs.Screen
         name="search"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.search} title="Search" />
+            <TabIcon focused={focused} icon={icons.search} label="Search" />
           ),
         }}
       />
-
       <Tabs.Screen
-        name="Save"
+        name="saved"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.save} title="Save" />
+            <TabIcon focused={focused} icon={icons.save} label="Saved" />
           ),
         }}
       />
-
       <Tabs.Screen
         name="profile"
         options={{
           tabBarIcon: ({ focused }) => (
-            <TabIcon focused={focused} icon={icons.person} title="Profile" />
+            <TabIcon focused={focused} icon={icons.person} label="Profile" />
           ),
         }}
       />

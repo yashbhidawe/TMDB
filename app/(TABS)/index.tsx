@@ -1,14 +1,26 @@
 import MovieCard from "@/components/MovieCard";
-import SearchBar from "@/components/SearchBar";
 import { icons } from "@/constants/icons";
-import { images } from "@/constants/images";
 import { fetchMovies } from "@/services/api";
 import useFetch from "@/services/useFetch";
+import { getNumColumns } from "@/utils/layout";
 import { useRouter } from "expo-router";
-import { ActivityIndicator, FlatList, Image, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  FlatList,
+  Image,
+  Text,
+  View,
+  useWindowDimensions,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+
+const H_PADDING = 20;
+const GAP = 12;
 
 export default function Index() {
   const router = useRouter();
+  const { width } = useWindowDimensions();
+  const numColumns = getNumColumns(width);
 
   const {
     data: movies,
@@ -19,62 +31,50 @@ export default function Index() {
   const results = movies?.results ?? [];
 
   return (
-    <View className="flex-1 bg-primary">
-      <Image
-        source={images.bg}
-        className="absolute w-full h-full z-0"
-        resizeMode="cover"
-      />
+    <View className="flex-1 bg-surface">
+      <SafeAreaView edges={["top"]} className="flex-1">
+        {moviesLoading ? (
+          <View className="flex-1 items-center justify-center">
+            <ActivityIndicator size="large" color="#6366f1" />
+          </View>
+        ) : moviesError ? (
+          <View className="flex-1 items-center justify-center px-6">
+            <Text className="text-destructive text-center">
+              {moviesError?.message}
+            </Text>
+          </View>
+        ) : (
+          <FlatList
+            data={results}
+            key={`grid-${numColumns}`}
+            keyExtractor={(item) => item.id.toString()}
+            numColumns={numColumns}
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={{
+              paddingHorizontal: H_PADDING,
+              paddingBottom: 100,
+            }}
+            columnWrapperStyle={{ gap: GAP, marginBottom: GAP + 8 }}
+            ListHeaderComponent={
+              <View className="pb-5">
+                <Image
+                  source={icons.logo}
+                  className="h-9 w-10 mb-6 self-center opacity-90"
+                />
 
-      {moviesLoading ? (
-        <ActivityIndicator size="large" color="#fff" className="flex-1" />
-      ) : moviesError ? (
-        <View className="flex-1 items-center justify-center px-5">
-          <Text className="text-red-500 text-center">
-            Error: {moviesError?.message}
-          </Text>
-        </View>
-      ) : (
-        <FlatList
-          data={results}
-          keyExtractor={(item) => item.id.toString()}
-          numColumns={2}
-          showsVerticalScrollIndicator={false}
-          contentContainerStyle={{
-            paddingHorizontal: 20,
-            paddingBottom: 40,
-          }}
-          columnWrapperStyle={{
-            gap: 16,
-            marginBottom: 20,
-          }}
-          ListHeaderComponent={
-            <View className="pt-20 pb-4">
-              <Image
-                source={icons.logo}
-                className="w-12 h-10 mb-6 self-center"
-              />
-
-              <SearchBar
-                onPress={() => router.push("/search")}
-                placeholder="Search for movies..."
-              />
-
-              <Text className="text-lg text-white font-bold mt-6">
-                Latest Movies
-              </Text>
-            </View>
-          }
-          renderItem={({ item }) => (
-            <View className="flex-1 max-w-[48%]">
-              <MovieCard {...item} />
-              <Text className="text-white mt-2 font-semibold" numberOfLines={2}>
-                {item.title}
-              </Text>
-            </View>
-          )}
-        />
-      )}
+                <Text className="text-foreground mt-6 text-xl font-semibold">
+                  Latest
+                </Text>
+              </View>
+            }
+            renderItem={({ item }) => (
+              <View className="flex-1 min-w-0">
+                <MovieCard {...item} />
+              </View>
+            )}
+          />
+        )}
+      </SafeAreaView>
     </View>
   );
 }

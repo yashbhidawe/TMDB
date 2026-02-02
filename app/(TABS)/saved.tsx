@@ -1,12 +1,20 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const saved = () => {
+const Saved = () => {
   return (
-    <View>
-      <Text>saved</Text>
+    <View className="flex-1 bg-surface">
+      <SafeAreaView edges={["top"]} className="flex-1 px-5 pt-4">
+        <Text className="text-foreground text-2xl font-semibold">Saved</Text>
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-muted text-center">
+            Movies you save will appear here.
+          </Text>
+        </View>
+      </SafeAreaView>
     </View>
   );
 };
 
-export default saved;
+export default Saved;

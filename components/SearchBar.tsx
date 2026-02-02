@@ -1,6 +1,12 @@
 import { icons } from "@/constants/icons";
 import React from "react";
-import { Image, TextInput, View } from "react-native";
+import {
+  Image,
+  Platform,
+  TextInput,
+  View,
+  useWindowDimensions,
+} from "react-native";
 
 interface Props {
   onPress?: () => void;
@@ -10,17 +16,30 @@ interface Props {
 }
 
 const SearchBar = ({ onPress, placeholder, value, onChangeText }: Props) => {
-  return (
-    <View className="flex-row items-center bg-dark-200 rounded-full px-5 h-12">
-      <Image source={icons.search} className="w-5 h-5 mr-3" />
+  const { width } = useWindowDimensions();
+  const isNarrow = width < 380;
+  const paddingHorizontal = isNarrow ? 14 : 18;
 
+  return (
+    <View className="flex-row items-center rounded-xl border border-border bg-surface-elevated overflow-hidden">
+      <View
+        className="justify-center pl-4"
+        style={{ paddingRight: paddingHorizontal - 4 }}
+      >
+        <Image source={icons.search} tintColor="#71717a" className="size-5" />
+      </View>
       <TextInput
         placeholder={placeholder}
-        className="flex-1 text-white outline-none "
-        placeholderTextColor="#a8b5db"
-        onPressIn={onPress}
+        placeholderTextColor="#71717a"
         value={value}
         onChangeText={onChangeText}
+        onPressIn={onPress}
+        editable={!!onChangeText || !onPress}
+        className="flex-1 py-3.5 text-foreground text-base"
+        style={{
+          paddingRight: paddingHorizontal,
+          ...(Platform.OS === "web" && { outlineStyle: "none" }),
+        }}
       />
     </View>
   );

@@ -2,6 +2,8 @@ import { Link } from "expo-router";
 import React from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
+const POSTER_ASPECT = 2 / 3;
+
 const MovieCard = ({
   id,
   poster_path,
@@ -11,29 +13,34 @@ const MovieCard = ({
 }: Movie) => {
   return (
     <Link href={`/movies/${id}`} asChild>
-      <TouchableOpacity activeOpacity={0.8} className="w-full">
-        <View>
+      <TouchableOpacity activeOpacity={0.85} className="flex-1 min-w-0">
+        <View className="overflow-hidden rounded-2xl bg-surface-elevated">
           <Image
             source={{
               uri: poster_path
                 ? `https://image.tmdb.org/t/p/w500${poster_path}`
-                : "https://placehold.co/600x900/1a1a1a/ffffff.png",
+                : "https://placehold.co/600x900/1a1a24/71717a.png",
             }}
-            className="w-full h-48 rounded-xl"
+            style={{ aspectRatio: 1 / POSTER_ASPECT, width: "100%" }}
             resizeMode="cover"
           />
-
-          <Text
-            className="text-white text-sm mt-2 font-semibold"
-            numberOfLines={2}
-          >
-            {title}
-          </Text>
-
-          <Text className="text-xs text-gray-400 mt-0.5">
-            ⭐ {vote_average?.toFixed(1)} · {release_date?.slice(0, 4)}
-          </Text>
+          <View className="absolute right-2 top-2 rounded-md bg-black/70 px-2 py-1">
+            <Text className="text-foreground text-xs font-semibold">
+              ★ {vote_average?.toFixed(1) ?? "—"}
+            </Text>
+          </View>
         </View>
+        <Text
+          className="text-foreground mt-2 text-sm font-medium leading-tight"
+          numberOfLines={2}
+        >
+          {title}
+        </Text>
+        {release_date ? (
+          <Text className="text-muted mt-0.5 text-xs">
+            {release_date.slice(0, 4)}
+          </Text>
+        ) : null}
       </TouchableOpacity>
     </Link>
   );

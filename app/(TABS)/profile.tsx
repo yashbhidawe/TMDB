@@ -1,12 +1,20 @@
-import { View, Text } from "react-native";
 import React from "react";
+import { Text, View } from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
-const profile = () => {
+const Profile = () => {
   return (
-    <View>
-      <Text>profile</Text>
+    <View className="flex-1 bg-surface">
+      <SafeAreaView edges={["top"]} className="flex-1 px-5 pt-4">
+        <Text className="text-foreground text-2xl font-semibold">Profile</Text>
+        <View className="flex-1 items-center justify-center">
+          <Text className="text-muted text-center">
+            Profile settings coming soon.
+          </Text>
+        </View>
+      </SafeAreaView>
     </View>
   );
 };
 
-export default profile;
+export default Profile;
